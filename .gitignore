@@ -1,0 +1,17 @@
+# compiled
+__pycache__
+
+# Environment
+.env
+.venv
+venv
+env.yaml
+API_KEY.py
+
+# Data collection
+log
+logcsv
+room_condition
+
+# Temporary folder
+documents
