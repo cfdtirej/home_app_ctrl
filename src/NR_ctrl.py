@@ -90,9 +90,6 @@ class MyHomeAppCtrl(NatureRemoAPI):
             })
         return result
     
-    def write_csv(self):
-
-
     def get_devices_dict(self) -> List[Dict]:
         devices_dict = [
             json.loads(device.as_json_string()) for device in self.get_devices()
