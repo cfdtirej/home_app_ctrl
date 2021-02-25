@@ -54,7 +54,7 @@ class DataCollectionPath:
         if not self.home_app_state_dir.exists():
             self.home_app_state_dir.mkdir(parents=True)
     
-    def room_state_csv(self, data: schemas.RoomState, cattagory: str):
+    def room_state_csv(self, data):
         """部屋の状態をCSVに記録する
         """
         jtc = pytz.timezone('Asia/Tokyo')
