@@ -1,6 +1,0 @@
-InfluxDB:
-  host: 192.168.30.67
-  port: 8086
-  username: root
-  password: root
-  database: mydb

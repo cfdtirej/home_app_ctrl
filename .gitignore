@@ -8,6 +8,7 @@ venv
 env.yaml
 API_KEY.py
 config.yaml
+.vscode
 
 # Data collection
 log

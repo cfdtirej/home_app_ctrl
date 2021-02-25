@@ -1,4 +1,4 @@
-from typing import List, Dict, Union, Optional
+from typing import Union
 
 
 def calc_di(te: Union[int, float], hu: Union[int, float]) -> float:
