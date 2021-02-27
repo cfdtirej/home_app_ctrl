@@ -4,3 +4,4 @@ influxdb==5.3.1
 PyYAML==5.4.1
 pandas==1.2.2
 numpy==1.20.1
+pytz==2021.1

@@ -26,3 +26,28 @@ def calc_tm(te: Union[int, float], hu: Union[int, float], wind: Union[int, float
     a = 1.76 + 1.4*wind**0.75
     tm = 37 - ((37 - te) / (0.68 - 0.0014*hu + (1 / a))) - (0.29*te * (1 - hu/100))
     return tm
+
+
+def di_lebel(di: Union[int, float]) -> int:
+    """不快指数DIの評価
+    Args:
+        di: 不快指数
+    Returns:
+        指数の評価(0が何も感じない・快適・熱くない、0より低いと寒い、0より大きいと暑い)
+    """
+    if di < 55:
+        return 3
+    elif (55 <= di) and (di <= 59):
+        return 2
+    elif (60 <= di) and (di <= 64):
+        return 0
+    elif (65 <= di) and (di <= 69):
+        return 0
+    elif (70 <= di) and (di <= 74):
+        return 0
+    elif (75 <= di) and (di <= 79):
+        return -1
+    elif (80 <= di) and (di <= 84):
+        return -2
+    elif di >= 85:
+        return -3
