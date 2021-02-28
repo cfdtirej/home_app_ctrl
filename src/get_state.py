@@ -72,7 +72,7 @@ class GetHakusanNatureRemo(NatureRemoAPI):
             elif appliance.light:
                 light_state = json.loads(appliance.light.state.as_json_string()) 
                 light = {
-                    'update_at': appliance.device.updated_at.astimezone(jst).isoformat(),
+                    'updated_at': appliance.device.updated_at.astimezone(jst).isoformat(),
                     'name': appliance.device.name,
                     'mac_address': appliance.device.mac_address,
                     'type': appliance.type,
@@ -83,31 +83,30 @@ class GetHakusanNatureRemo(NatureRemoAPI):
             elif appliance.tv:
                 tv_state = json.loads(appliance.tv.state.as_json_string())
                 tv = {
-                    'update_at': appliance.device.updated_at.astimezone(jst).isoformat(),
+                    'updated_at': appliance.device.updated_at.astimezone(jst).isoformat(),
                     'name': appliance.device.name,
                     'mac_address': appliance.device.mac_address,
                     'type': appliance.type,
-                    
+                    'id': appliance.id,
                     **tv_state
                 }
                 result.append(tv)
         return result
     
-    def appliance_settings_csv_writer(self, appliances_state) -> NoReturn:
+    def appliance_settings_csv_writer(self, state: Dict[str, Any]) -> NoReturn:
         dt = datetime.datetime.now(jst)
-        for state in appliances_state:
-            app_type = state['type']
-            csvfile = Path(__file__).parent / 'logcsv' / 'home_app' / f'{app_type}' / f'{dt.date()}.csv'
-            if not csvfile.parent.is_dir():
-                csvfile.parent.mkdir(parents=True)
-            if not csvfile.exists():
-                csvfile.touch()
-                with open(csvfile, 'w') as f:
-                    writer = csv.writer(f)
-                    writer.writerow(state.keys())
-            with open(csvfile, 'a') as f:
+        app_type = state['type']
+        csvfile = Path(__file__).parent / 'logcsv' / 'home_app' / f'{app_type}' / f'{dt.date()}.csv'
+        if not csvfile.parent.is_dir():
+            csvfile.parent.mkdir(parents=True)
+        if not csvfile.exists():
+            csvfile.touch()
+            with open(csvfile, 'w') as f:
                 writer = csv.writer(f)
-                writer.writerow(state.values())
+                writer.writerow(state.keys())
+        with open(csvfile, 'a') as f:
+            writer = csv.writer(f)
+            writer.writerow(state.values())
             
     
     def get_hu_il_te(self) -> List[Dict[str, Any]]:

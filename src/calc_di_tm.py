@@ -37,17 +37,17 @@ def di_lebel(di: Union[int, float]) -> int:
     """
     if di < 55:
         return 3
-    elif (55 <= di) and (di <= 59):
+    elif (55 <= di) and (di < 60):
         return 2
-    elif (60 <= di) and (di <= 64):
+    elif (60 <= di) and (di < 65):
         return 0
-    elif (65 <= di) and (di <= 69):
+    elif (65 <= di) and (di < 70):
         return 0
-    elif (70 <= di) and (di <= 74):
+    elif (70 <= di) and (di < 75):
         return 0
-    elif (75 <= di) and (di <= 79):
+    elif (75 <= di) and (di < 80):
         return -1
-    elif (80 <= di) and (di <= 84):
+    elif (80 <= di) and (di < 85):
         return -2
     elif di >= 85:
         return -3

@@ -14,34 +14,6 @@ import calc_di_tm
 import settings
 from get_state import GetHakusanNatureRemo
 
-# api = NatureRemoAPI(API_KEY.API_HAKUSAN)
-# api = NatureRemoAPI(API_KEY.API_MYHOME)
-
-
-# devices = api.get_devices()
-# appliances = api.get_appliances()
-# for dev in api.get_devices():
-#     print(dev.newest_events)
-#     print()
-
-# with open('./devices.json', 'w') as f:
-#     json.dump(appliances_dict, f, indent=4)
-
-# エアコンの設定温度変える
-# api.update_aircon_settings(
-#     appliance=appliances[0].id,
-#     operation_mode='warm',
-#     temperature='23',
-# )
-
-# api.update_aircon_settings(
-#     appliances[0].id, operation_mode='hot', temperature=26)
-# print(appliances[0].type)
-# api.update_aircon_settings(appliance=)
-
-# print(appliances[0].aircon)
-# print(devices)
-
 
 class HakusanHomeAppCtrl(GetHakusanNatureRemo):
     def homeapp_auto_ctrl(self):
@@ -53,57 +25,46 @@ class HakusanHomeAppCtrl(GetHakusanNatureRemo):
                     'h04 102 living'
                     
     def homeapp_auto_ctrl_ac_winter(self, floor: Literal[1, 2]) -> NoReturn:
-        """エアコンを調整
+        """エアコンの設定を修正
+        設定を変更したらCSVに記録する
         """
         if floor == 1:
-            name = settings.CONFIG['NatureRemoName']['1F']
+            idx = 0
+            aircon_id = settings.CONFIG['NatureRemoName']['Aircon1F']['id']
+            app_state = self.get_appliances_state()[0]
+            room_state = self.get_hu_il_te()[0]
         elif floor == 2:
-            name = settings.CONFIG['NatureRemoName']['2F']
+            idx = 1
+            aircon_id = settings.CONFIG['NatureRemoName']['Aircon2F']['id']
+            room_state = self.get_hu_il_te()[1]
+            app_state = self.get_appliances_state()[1]
         else:
             raise 'Args is not 1 or 2'
-        room_state = self.get_hu_il_te()
-        app_state = self.get_appliances_state()
-        for app in app_state:
-            for room in room_state:
-                if (app['name'] and room['name'] == name) and (app['type'] == 'AC'):
-                    if room['di_lebel'] != 0:
-                        self.update_aircon_settings(
-                            appliance=app['id'],
-                            operation_mode='warm',
-                            temperature=int(app['temp'])+room['di_lebel'])
-                        self.appliance_settings_csv_writer(self.get_appliances_state())
-
-    def homeapp_auto_ctrl_2f_ac_winter(self, ):
-        """2Fのエアコンを調整
-        """
-        room_state = self.get_hu_il_te()
-        app_state = self.get_appliances_state()
-        for app in app_state:
-            for room in room_state:
-                if (app['name'] and room['name'] == 'h06 102 2f') and (app['type'] == 'AC'):
-                    if room['di_lebel'] != 0:
-                        self.update_aircon_settings(
-                            appliance=app['id'],
-                            operation_mode='warm',
-                            temperature=int(app['temp'])+room['di_lebel'])
-                        self.appliance_settings_csv_writer(self.get_appliances_state())
-
-
-class MyHomeAppCtrl(NatureRemoAPI):
-    
-    def get_devices_dict(self) -> List[Dict]:
-        devices_dict = [
-            json.loads(device.as_json_string()) for device in self.get_devices()
-        ]
-        return devices_dict
-
-    def get_appliances_dict(self) -> List[Dict]:
-        appliances_dict = [
-            json.loads(app.as_json_string()) for app in self.get_appliances()
-        ]
-        return appliances_dict
-
-    def stop_aircon(self, aircon_id: int = 1) -> None:
-        self.update_aircon_settings(
-            appliance=self.get_appliances[aircon_id].id, button='power-off')
-
+        
+        # エアコンの設定温度見直し
+        if room_state['di_lebel'] != 0:
+            te = int(app_state['temp'])+room_state['di_lebel']
+            if te > 30:
+                # te = int(app_state['temp'])
+                # self.update_aircon_settings(
+                #     appliance=aircon_id, operation_mode='warm', temperature=te, air_volume='3',button='')
+                pass
+            elif te < 18:
+                # te = int(app_state['temp'])
+                # self.update_aircon_settings(
+                #     appliance=aircon_id, operation_mode='warm', temperature=te, air_volume='3',button='')
+                pass
+            else:
+                self.update_aircon_settings(
+                    appliance=aircon_id, operation_mode='warm', temperature=te, air_volume='4',button='')
+                # 設定変更の記録
+                self.appliance_settings_csv_writer(self.get_appliances_state()[idx])
+        # for app in app_state:
+        #     for room in room_state:
+        #         if (app['name'] and room['name'] == name) and (app['type'] == 'AC'):
+        #             if room['di_lebel'] != 0:
+        #                 self.update_aircon_settings(
+        #                     appliance=app['id'],
+        #                     operation_mode='warm',
+        #                     temperature=int(app['temp'])+room['di_lebel'])
+        #                 self.appliance_settings_csv_writer(self.get_appliances_state())
