@@ -18,18 +18,24 @@ light_id = settings.CONFIG['NatureRemoName']['SubRoomLight']['id']
 
 # はじめにエアコンつける
 # api.update_aircon_settings(
-#     appliance=aircon_1F_id, operation_mode='warm', temperature='24', air_volume='4', button='')
+#     appliance=aircon_1F_id, operation_mode='warm', temperature='21', air_volume='4', button='')
 # first_app_state = api.get_appliances_state()
 # api.appliance_settings_csv_writer(first_app_state[0])      
 
+
 day_now = datetime.now(jst).day
+print('>>実行中')
 while True:
     dt_now = datetime.now(jst)
-    if dt_now.minute == 0:
+    if dt_now.minute in [0, 30]:
         api.homeapp_auto_ctrl_ac_winter(1)
-        time.sleep(60*10)
+        time.sleep(60*58)
     if day_now != dt_now.day:
         break
+    time.sleep(1)
+
+
+######################################
 # api.homeapp_auto_ctrl_ac_winter(1)
 
 # １Fエアコンの自動設定
