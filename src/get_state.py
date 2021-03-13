@@ -20,6 +20,7 @@ jst = pytz.timezone('Asia/Tokyo')
 
 # def appliance_csv_writer():
 
+
 # class NatureRemoGet(NatureRemoAPI)
 def get_applience_state() -> List[Dict[str, Any]]:
     result = []
