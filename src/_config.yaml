@@ -4,3 +4,9 @@ InfluxDB:
   username: user
   password: passed
   database: dbname
+
+AppliancesId: 
+  Aircon_1F: xxxxx
+  Aircon_2F: xxxxx
+  TV: xxxxx
+  Light: xxxxx
